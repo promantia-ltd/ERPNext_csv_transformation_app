@@ -95,7 +95,7 @@ def getMainData(fileLocation):
 
 def saveTemplateWithData(fileName,mappedData):
     with open(str(Path(__file__).parent / ("output/"+str(fileName)+".csv")), 'w', newline='') as file:
-            writer = csv.writer(file)
+            writer = csv.writer(file,quoting=csv.QUOTE_ALL)
             writer.writerows(mappedData)
 
 

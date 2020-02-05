@@ -9,7 +9,7 @@
             "destination":"description"
         },
         { 
-            "source":"Product #",
+            "source":"Product",
             "destination":"item_code"
         },
         {
@@ -66,7 +66,7 @@
     "item_price":{
         "Standard Selling":[
         { 
-            "source":"Product #",
+            "source":"Product",
             "destination":"item_code"
         },
         { 
@@ -105,7 +105,7 @@
     ],
     "Standard Buying":[
         { 
-            "source":"Product #",
+            "source":"Product",
             "destination":"item_code"
         },
         { 
