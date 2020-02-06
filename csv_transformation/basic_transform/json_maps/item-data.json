@@ -9,7 +9,7 @@
             "destination":"description"
         },
         { 
-            "source":"Product #",
+            "source":"Product",
             "destination":"item_code"
         },
         {
@@ -23,7 +23,7 @@
             "default":"Each"
         },
         {
-            "source":"Item Group",
+            "source":"Type",
             "destination":"item_group",
             "default":"Products"
         },
@@ -56,12 +56,17 @@
             "source":"Price List",
             "destination":"default_price_list",
             "default":"Standard Buying"
+        },
+        {
+            "source":"Is Sales Item",
+            "destination":"is_sales_item",
+            "default":"1"
         }
     ],
     "item_price":{
         "Standard Selling":[
         { 
-            "source":"Product #",
+            "source":"Product",
             "destination":"item_code"
         },
         { 
@@ -100,7 +105,7 @@
     ],
     "Standard Buying":[
         { 
-            "source":"Product #",
+            "source":"Product",
             "destination":"item_code"
         },
         { 
@@ -137,5 +142,5 @@
             "default":"0"
         } 
     ]
-}
+    }
 }
