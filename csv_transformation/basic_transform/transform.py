@@ -58,11 +58,15 @@ def getMappedData(templateContent,mainContent,jsonMap):
                 if(not (val[dataColumn.index(jsonData["source"])] and val[dataColumn.index(jsonData["source"])].strip())):
                     listArray[templateColumn.index(jsonData["destination"])]=jsonData["default"]
                 else:
-                    itemCode=val[dataColumn.index('Product #')]
+                    itemCode=val[dataColumn.index('Product')]
                     if not(itemCode in itemGroupList):
                         listArray[templateColumn.index(jsonData["destination"])]=val[dataColumn.index(jsonData["source"])] 
                     else:
-                        append=False
+                        if jsonData["source"] == 'Product':
+                            print(val[dataColumn.index(jsonData["source"])]+str(index))
+                            listArray[templateColumn.index(jsonData["destination"])]=val[dataColumn.index(jsonData["source"])]+str(index)
+                        else:
+                            listArray[templateColumn.index(jsonData["destination"])]=val[dataColumn.index(jsonData["source"])]
             except ValueError:
                 try:
                     listArray[templateColumn.index(jsonData["destination"])]=jsonData["default"]

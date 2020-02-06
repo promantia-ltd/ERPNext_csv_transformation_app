@@ -15,7 +15,7 @@
         {
             "source":"Company",
             "destination":"company",
-            "default":"Promantia"
+            "default":"Parkslope Plumbing Supply"
         },
         { 
             "source":"UOM",
@@ -50,7 +50,7 @@
         {
             "source":"Warehouse",
             "destination":"default_warehouse",
-            "default":"Stores - P"
+            "default":"Stores - PPS"
         },
         {
             "source":"Price List",
