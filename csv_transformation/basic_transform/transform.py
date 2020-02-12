@@ -4,15 +4,17 @@ import csv
 import json, os
 import frappe
 from frappe.commands import pass_context, get_site
+from frappe.core.doctype.data_export.exporter import export_data
 from frappe.utils.csvutils import read_csv_content
 
 def transformFile(masterFilePath=None) :
     from frappe.utils.csvutils import read_csv_content
+    prepareColumnAndGetData('Item')
     if isValidPath("/"+masterFilePath):
         jsonData=getJsonMap()
         print("Initiating transformation...")
         for key in jsonData:
-            templateRows=getTemplate(key)
+            templateRows=getTemplate(key.title())
             mainFileData=getMainData("/"+masterFilePath)
             print("Transformation started for",key,".Please wait...")
             if checkIfJsonArray(jsonData[key]):
@@ -85,10 +87,11 @@ def getJsonMap():
 
 
 def getTemplate(doctypeName):
-    templatePath=Path(__file__).parent / ("data/"+str(doctypeName)+".csv")
-    with open(str(templatePath),'r') as tempcsvfile:
-        templateContent=read_csv_content(tempcsvfile.read())
-    return templateContent
+    # downloadTemplate(doctypeName)
+    # templatePath=Path(__file__).parent / ("data/"+str(doctypeName)+".csv")
+    # with open(str(templatePath),'r') as tempcsvfile:
+    #     templateContent=read_csv_content(tempcsvfile.read())
+    return read_csv_content(prepareColumnAndGetData(doctypeName))
 
 
 def getMainData(fileLocation):
@@ -111,6 +114,34 @@ def checkIfJsonArray(jsonData):
         except TypeError:
             return False
 
+def downloadTemplate(doctypeName):
+    response=prepareColumnAndGetData(doctypeName)
+    templatePath=Path(__file__).parent / ("data/"+str(doctypeName)+".csv")
+    with open('itemTemplate.csv','wb') as csvFile:
+        csvFile.write(response)
+
+
+def prepareColumnAndGetData(doctypeName):
+    print(doctypeName)
+    ignoreArray=['Section Break','Column Break','Table','Button']
+    columnArray1=[ val.fieldtype for val in frappe.get_meta(doctypeName).fields if val.fieldname=='set_meta_tags']
+    columnArray=[ val.fieldname for val in frappe.get_meta(doctypeName).fields if not val.fieldtype in ignoreArray and not val.hidden==1]
+    filteredColumn=[val for val in filter(None,columnArray)]
+    dictValueWithColumnData={}
+    dictValueWithColumnData[doctypeName]=filteredColumn
+    for val in frappe.get_meta(doctypeName).get_table_fields():
+        columnArray=[val.fieldname for val in frappe.get_meta(val.options).fields if not val.fieldtype in ignoreArray and not val.hidden==1]
+        filteredColumn=[val for val in filter(None,columnArray)]
+        dictValueWithColumnData[val.options]=filteredColumn
+    export_data(doctypeName, doctypeName, True, False,json.dumps(dictValueWithColumnData),'CSV', True)
+    return frappe.response['result']
+
+
+
+
+
+
+    
 
 
 

@@ -63,7 +63,7 @@
             "default":"1"
         }
     ],
-    "item_price":{
+    "item price":{
         "Standard Selling":[
         { 
             "source":"Product",
