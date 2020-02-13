@@ -7,19 +7,18 @@ from frappe.commands import pass_context, get_site
 from frappe.core.doctype.data_export.exporter import export_data
 from frappe.utils.csvutils import read_csv_content
 
-def transformFile(masterFilePath=None) :
+def transformFile(**kwargs) :
     from frappe.utils.csvutils import read_csv_content
-    prepareColumnAndGetData('Item')
-    if isValidPath("/"+masterFilePath):
-        jsonData=getJsonMap()
+    if isValidDataPassed(kwargs):
+        jsonData=getJsonMap(kwargs['dataType'])
         print("Initiating transformation...")
         for key in jsonData:
             templateRows=getTemplate(key.title())
-            mainFileData=getMainData("/"+masterFilePath)
+            mainFileData=getMainData("/"+kwargs['filePath'])
             print("Transformation started for",key,".Please wait...")
             if checkIfJsonArray(jsonData[key]):
                 for key1 in jsonData[key]:
-                    mainFileData=getMainData("/"+masterFilePath)
+                    mainFileData=getMainData("/"+kwargs['filePath'])
                     mappedData=getMappedData(templateRows,mainFileData,jsonData[key][key1])
                     saveTemplateWithData(key,mappedData)
                 print("Transformation completed for ",key)
@@ -29,14 +28,27 @@ def transformFile(masterFilePath=None) :
                 saveTemplateWithData(key,mappedData)
                 print("Successfully created the file at ",Path(__file__).parent / ("output/"+str(key)+".csv"))
 
-
-def isValidPath(*args):
+def isValidDataPassed(kwargs):
     try:
-        for arg in args:
-            if not(os.path.exists(arg)):
-                print("The specified path",arg,"doesn't exist. Please provide a valid path.")
-                return False
+        if(not kwargs['filePath'] or not kwargs['dataType']):
+            print("You have entered some empty value with the argument. Do make sure you pass a valid value to be processed.")
+        isValidPath("/"+kwargs['filePath'])
     except:
+        print('''Ooops...! You must have missed to pass some arguments essential for the transformation. 
+        Please make sure you pass the arguments in given format below - 
+        {'filePath' :'<your main csv file path>','dataType':'<type of data you want to transform>'} ''')
+        return False
+    return True
+
+
+
+def isValidPath(filePath):
+    try:
+        if not(os.path.exists(filePath)):
+            print("The specified path",filePath,"doesn't exist. Please provide a valid path.")
+            return False
+    except:
+        print("There seems to be a problem with the file path (" +filePath+ ") you've sent. Please review it and try again.")
         return False
     return True
 
@@ -47,11 +59,9 @@ def getMappedData(templateContent,mainContent,jsonMap):
     listArray=[]
     itemGroupList=set()
     itemCodeList=set()
-    append=True
     for value in mainContent:
         itemGroupList.add(value[dataColumn.index('Type')])
     for index,val in enumerate(mainContent):
-        append=True
         listArray=[]
         for i in templateColumn:
             listArray.append(None)
@@ -60,37 +70,24 @@ def getMappedData(templateContent,mainContent,jsonMap):
                 if(not (val[dataColumn.index(jsonData["source"])] and val[dataColumn.index(jsonData["source"])].strip())):
                     listArray[templateColumn.index(jsonData["destination"])]=jsonData["default"]
                 else:
-                    itemCode=val[dataColumn.index('Product')]
-                    if not(itemCode in itemGroupList):
-                        listArray[templateColumn.index(jsonData["destination"])]=val[dataColumn.index(jsonData["source"])] 
-                    else:
-                        if jsonData["source"] == 'Product':
-                            print(val[dataColumn.index(jsonData["source"])]+str(index))
-                            listArray[templateColumn.index(jsonData["destination"])]=val[dataColumn.index(jsonData["source"])]+str(index)
-                        else:
-                            listArray[templateColumn.index(jsonData["destination"])]=val[dataColumn.index(jsonData["source"])]
+                    listArray[templateColumn.index(jsonData["destination"])]=val[dataColumn.index(jsonData["source"])]
             except ValueError:
                 try:
                     listArray[templateColumn.index(jsonData["destination"])]=jsonData["default"]
                 except KeyError:
-                    print(val[dataColumn.index(jsonData["source"])])
-        if append:
-            templateContent.append(listArray)
+                    print("Unable to map the data for [",val[dataColumn.index(jsonData["source"])],"] Please make sure you add a default value in the json map.")
+        templateContent.append(listArray)
     return templateContent
 
 
-def getJsonMap():
-    jsonMapPath = Path(__file__).parent / "json_maps/item-data.json"
+def getJsonMap(jsonFileName):
+    jsonMapPath=Path(__file__).parent / ("json_maps/"+str(jsonFileName)+".json")
     with open(str(jsonMapPath),'r') as jsonfile:
         jsonData = json.load(jsonfile)
     return jsonData
 
 
 def getTemplate(doctypeName):
-    # downloadTemplate(doctypeName)
-    # templatePath=Path(__file__).parent / ("data/"+str(doctypeName)+".csv")
-    # with open(str(templatePath),'r') as tempcsvfile:
-    #     templateContent=read_csv_content(tempcsvfile.read())
     return read_csv_content(prepareColumnAndGetData(doctypeName))
 
 
@@ -122,7 +119,6 @@ def downloadTemplate(doctypeName):
 
 
 def prepareColumnAndGetData(doctypeName):
-    print(doctypeName)
     ignoreArray=['Section Break','Column Break','Table','Button']
     columnArray1=[ val.fieldtype for val in frappe.get_meta(doctypeName).fields if val.fieldname=='set_meta_tags']
     columnArray=[ val.fieldname for val in frappe.get_meta(doctypeName).fields if not val.fieldtype in ignoreArray and not val.hidden==1]
