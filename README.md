@@ -8,7 +8,7 @@ First install the app
 
 To execute:
 
-bench --site <site_name> execute csv_transformation.basic_transform.transform.transformFile <csv faile path>
+bench --site <site_name> execute csv_transformation.basic_transform.transform.transformFile --kwargs {'filePath' :'<your main csv file path>','dataType':'<type of data you want to transform>'}
 
 
 #### License
