@@ -1,0 +1,146 @@
+{
+    "customer":[
+    {
+        "source":"Cust#",
+        "destination":"customer_id"
+    },
+    {
+        "source":"Name",
+        "destination":"customer_name"
+    },
+    {
+        "source":"TYPE",
+        "destination":"customer_type",
+        "default":"company"
+    },
+    {
+        "source":"Customer Group",
+        "destination":"customer_group",
+        "default":"All Customer Groups"
+    },
+    {
+        "source":"Territory",
+        "destination":"territory",
+        "default":"All Territories"
+    },
+    {
+        "source":"Disabled",
+        "destination":"disabled",
+        "default":"0"
+    },
+    {
+        "source":"Is Internal Customer",
+        "destination":"is_internal_customer",
+        "default":"0"
+    },
+    {
+        "source":"Billing Currency",
+        "destination":"default_currency",
+        "default":"USD"
+    },
+    {
+        "source":"Default Price List",
+        "destination":"default_price_list",
+        "default":"Standard Selling"
+    },
+    {
+        "source":"Company",
+        "destination":"company",
+        "default":"Parkslope Plumbing Supply"
+    },
+    {
+        "source":"CRED-LIM",
+        "destination":"credit_limit",
+        "default":"0"
+    },
+    {
+        "source": "customer_details:concat(COMMENT 1,COMMENT 2,COMMENT 3,COMMENT 4)",
+        "destination":"customer_details",
+        "default":""
+    }
+    ],
+    "address":[
+        {
+            "source":"Link doctype",
+            "destination":"link_doctype",
+            "default":"Customer"
+        },
+        {
+            "source":"Name",
+            "destination":"link_name"
+        },
+        {
+            "source":"Address Type",
+            "destination":"address_type",
+            "default":"Office"
+        },
+        {
+            "source":"ADDR1",
+            "destination":"address_line1",
+            "default":""
+        },
+        {
+            "source":"ADDR2",
+            "destination":"address_line2",
+            "default":""
+        },
+        {
+            "source":"CITY",
+            "destination":"city",
+            "default":"-"
+        },
+        {
+            "source":"Contry",
+            "destination":"country",
+            "default":"United States"
+        },
+        {
+            "source":"ST",
+            "destination":"state",
+            "default":""
+        },
+        {
+            "source":"ZIP",
+            "destination":"pincode",
+            "default":"0"
+        },
+        {
+            "source":"FAX",
+            "destination":"fax",
+            "default":"0"
+        },
+        {
+            "source":"PHONE",
+            "destination":"phone",
+            "default":"0"
+        },
+        {
+            "source": "is_primary_address",
+            "destination":"is_primary_address",
+            "default":"1"
+        },
+        {
+            "source":"is_shipping_address",
+            "destination":"is_shipping_address",
+            "default":"1"
+        }
+
+    ],
+    "contact":[
+        {
+            "source":"Link doctype",
+            "destination":"link_doctype",
+            "default":"Customer"
+        },
+        {
+            "source":"Name",
+            "destination":"link_name"
+        },
+        {
+            "source":"CONTACT",
+            "destination":"first_name",
+            "default": ""
+        }
+    ]
+
+}
