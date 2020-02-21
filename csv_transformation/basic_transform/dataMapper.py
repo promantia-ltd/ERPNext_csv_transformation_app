@@ -41,5 +41,8 @@ class DataMapper:
     def concat(self,dataColumn,jsonData,masterVal,params):
         concatenatedValue=''
         for val in params.replace(')','').split(','):
-            concatenatedValue=concatenatedValue+' '+masterVal[dataColumn.index(val)]
+            try:
+                concatenatedValue=concatenatedValue+' '+masterVal[dataColumn.index(val)]
+            except TypeError:
+                concatenatedValue=concatenatedValue+' '+jsonData['default']
         return concatenatedValue

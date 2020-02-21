@@ -57,7 +57,36 @@
         "source": "customer_details:concat(COMMENT 1,COMMENT 2,COMMENT 3,COMMENT 4)",
         "destination":"customer_details",
         "default":""
+    },
+    {
+        "source":"SALEMAN",
+        "destination":"sales_person",
+        "default":"Tom Cruise"
+
+    },
+    {
+        "source":"allocated_percentage",
+        "destination":"allocated_percentage",
+        "default":"100"
     }
+
+    ],
+    "sales person":[
+        {
+            "source":"SALEMAN",
+            "destination":"sales_person_name",
+            "default":""
+        },
+        {
+            "source":"COMMISSION",
+            "destination":"commission_rate",
+            "default":"0"
+        },
+        {
+            "source":"is_group",
+            "destination":"is_group",
+            "default":"0"
+        }
     ],
     "address":[
         {
